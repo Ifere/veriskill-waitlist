@@ -1,5 +1,4 @@
-
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import WaitlistForm from "@/components/WaitlistForm";
 import Feature from "@/components/Feature";
 import StepGuide from "@/components/StepGuide";
@@ -7,12 +6,18 @@ import { Video, Users, BarChart, GraduationCap } from "lucide-react";
 
 export default function Index() {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [isVideoLoading, setIsVideoLoading] = useState(true);
+  const [isMuted, setIsMuted] = useState(true);
 
   useEffect(() => {
     if (videoRef.current) {
-      videoRef.current.playbackRate = 0.5;
+      videoRef.current.playbackRate = 1.0;
     }
   }, []);
+
+  const handleToggleMute = () => {
+    setIsMuted(!isMuted);
+  };
 
   return (
     <div className="min-h-screen w-full overflow-x-hidden">
@@ -21,31 +26,52 @@ export default function Index() {
         <video
           ref={videoRef}
           autoPlay
-          muted
           loop
           playsInline
-          className="absolute inset-0 w-full h-full object-cover"
+          className={`absolute inset-0 w-full h-full object-cover ${
+            isVideoLoading ? 'hidden' : 'block'
+          }`}
+          onLoadedData={() => setIsVideoLoading(false)}
+          muted={isMuted}
         >
           <source
-            src="https://cdn.coverr.co/videos/coverr-typing-on-computer-2741/1080p.mp4"
+            src="https://res.cloudinary.com/doy5slx3n/video/upload/v1739234658/VeriSkill_Your_Skills_Verified_1_ihcile.mp4"
             type="video/mp4"
           />
         </video>
-        <div className="absolute inset-0 bg-black/60" />
+        <div className="absolute inset-0 bg-black/30" />
         
+        <button
+          onClick={handleToggleMute}
+          className="absolute bottom-4 right-4 z-20 p-2 rounded-full bg-black/50 hover:bg-black/70 text-white transition-colors"
+        >
+          {isMuted ? (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M11 5 6 9H2v6h4l5 4V5Z"/>
+              <line x1="23" y1="9" x2="17" y2="15"/>
+              <line x1="17" y1="9" x2="23" y2="15"/>
+            </svg>
+          ) : (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+            </svg>
+          )}
+        </button>
+
         <div className="relative z-10 container mx-auto text-center text-white">
-          <span className="inline-block animate-fade-down px-4 py-1.5 mb-6 text-sm font-medium bg-primary/20 rounded-full">
+          {/* <span className="inline-block animate-fade-down px-4 py-1.5 mb-6 text-sm font-medium bg-primary/20 rounded-full">
             Coming Soon
           </span>
           <h1 className="text-4xl md:text-6xl font-bold mb-6 animate-fade-down [animation-delay:200ms]">
             Showcase Your Real Skills
           </h1>
-          <p className="text-xl md:text-2xl text-gray-200 mb-12 max-w-2xl mx-auto animate-fade-down [animation-delay:400ms]">
+         <p className="text-xl md:text-2xl text-gray-200 mb-12 max-w-2xl mx-auto animate-fade-down [animation-delay:400ms]">
             A revolutionary platform where talent meets opportunity through verified project demonstrations
-          </p>
-          <div className="animate-fade-up [animation-delay:600ms]">
-            <WaitlistForm />
-          </div>
+          </p> 
+          */} 
+
         </div>
       </section>
 
@@ -132,9 +158,12 @@ export default function Index() {
           <p className="text-xl text-muted-foreground mb-12 max-w-2xl mx-auto">
             Join the waitlist today and be among the first to experience the future of skill verification
           </p>
-          <WaitlistForm />
+          <div className="flex justify-center">
+            <WaitlistForm />
+          </div>
         </div>
       </section>
     </div>
   );
 }
+
