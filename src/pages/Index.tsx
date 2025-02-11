@@ -22,13 +22,13 @@ export default function Index() {
   return (
     <div className="min-h-screen w-full overflow-x-hidden">
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center p-6">
+      <section className="relative min-h-[100vh] md:min-h-screen flex items-center justify-center p-6">
         <video
           ref={videoRef}
           autoPlay
           loop
           playsInline
-          className={`absolute inset-0 w-full h-full object-cover ${
+          className={`absolute inset-0 w-full h-full object-contain md:object-cover ${
             isVideoLoading ? 'hidden' : 'block'
           }`}
           onLoadedData={() => setIsVideoLoading(false)}
